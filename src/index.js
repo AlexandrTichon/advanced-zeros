@@ -1,8 +1,13 @@
 module.exports = function getZerosCountBase(number, base){
-    powers = primeFactors(base);
-    for (let i = 1; i <= 1+powers.split('*').length-1; i++){
-        console.log(getZerosCount(number, powers[powers.indexOf('^') - 1]));  
+    baseProp = primeFactors(base);
+    //console.log(baseProp);
+    answer = [];
+    for (let i = 0; i < Object.keys(baseProp).length; i++) {
+        answer[i] = getZerosCount(number, baseProp['number' + i].numb);
+        if (baseProp['number' + i].pow > 1) answer[i] = Math.floor(answer[i] / baseProp['number' + i].pow);
     }
+    //console.log(Math.min(...answer));
+    return Math.min(...answer);
 }
 
 
@@ -18,7 +23,7 @@ function getZerosCount(number, _denominator) {
       else zero_number += slag;
       power++;
     }
-    console.log(zero_number);
+    //console.log(zero_number);
     return zero_number;
 }
 
@@ -37,20 +42,25 @@ function primeFactors(number){
         }
         else i++;
     }
-    console.log(answer_mass);
-    var answer = '';
+    //console.log(answer_mass);
+    answer = { };
+    count = 0;
     for (let i = 0; i < answer_mass.length; i++) {
         primeFactor = answer_mass[i];
         var power = 1;
-        if (answer.length != 0) answer += '*';
         for (let j = i + 1; j < answer_mass.length; j++)
         {
             if (answer_mass[j] === primeFactor) power++;
             else break;
         }
-        answer += primeFactor + '^' + power;
+        ans_obj = {
+            numb: primeFactor,
+            pow: power,
+        }
+        answer['number' + count] = ans_obj;
+        count++;
         i += power - 1;
     }
-    console.log(answer);
+    //console.log(answer);
     return answer;
 }
